@@ -17,12 +17,11 @@ namespace lab2_web_api.Controllers
     public class TasksController : ControllerBase
     {
         private ITaskService taskService;
-        private IUsersService usersService;
 
-        public TasksController(ITaskService taskService, IUsersService usersService)
+        public TasksController(ITaskService taskService)
         {
             this.taskService = taskService;
-            this.usersService = usersService;
+
         }
 
         /// <summary>
@@ -108,8 +107,8 @@ namespace lab2_web_api.Controllers
         /// <remarks>
         /// Sample request:
         ///
-        ///     POST /tasks
-        ///        {
+        ///   POST /tasks
+        ///    {
         ///    "title": "Implement the Comments v3",
         ///    "description": "Implement the Comments for tasks",
         ///    "added": "2019-04-14T07:00:00",
@@ -127,17 +126,15 @@ namespace lab2_web_api.Controllers
         ///    "important": false
         ///    }
         ///    ]
-        ///}
+        ///    }
         /// </remarks>
         /// <param name="Task">The task that will be created</param>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Roles = "Admin,Regular")]
         [HttpPost]
         public void Post([FromBody] TaskPostModel Task)
         {
-            User addedBy = usersService.GetCurentUser(HttpContext);
-            taskService.Create(Task, addedBy);
+            taskService.Create(Task);
         }
 
         // PUT: api/Tasks/5

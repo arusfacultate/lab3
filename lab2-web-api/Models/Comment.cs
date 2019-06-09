@@ -13,6 +13,5 @@ namespace lab2_web_api.Models
 
         public Taskk Task { get; set; }
 
-        public User AddedBy { get; set; }
     }
 }

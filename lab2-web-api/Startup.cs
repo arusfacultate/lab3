@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Text;
 using lab2_web_api.Models;
 using lab2_web_api.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -79,31 +78,10 @@ namespace lab2_web_api
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
-            // configure jwt authentication
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
 
 
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<ICommentService, CommentService>();
-            services.AddScoped<IUsersService, UsersService>();
         
         }
 
@@ -120,8 +98,6 @@ namespace lab2_web_api
                 app.UseHsts();
             }
 
-            //must be before UseMvc.
-            app.UseAuthentication();
 
             app.UseHttpsRedirection();
             app.UseMvc();

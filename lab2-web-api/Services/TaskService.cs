@@ -11,7 +11,7 @@ namespace lab2_web_api.Services
     {
         PaginatedList<TaskGetModel> GetAll(DateTime? from, DateTime? to, int page);
         Taskk GetById(int id);
-        Taskk Create(TaskPostModel task, User addedBy);
+        Taskk Create(TaskPostModel task);
         Taskk Upsert(int id, Taskk task);
         Taskk Delete(int id);
 
@@ -24,10 +24,9 @@ namespace lab2_web_api.Services
             this.context = context;
         }
 
-        public Taskk Create(TaskPostModel task, User addedBy)
+        public Taskk Create(TaskPostModel task)
         {
             Taskk toAdd = TaskPostModel.ToTask(task);
-            toAdd.Owner = addedBy;
             context.Tasks.Add(toAdd);
             context.SaveChanges();
             return toAdd;
